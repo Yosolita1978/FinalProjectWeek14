@@ -77,7 +77,7 @@ function Students() {
                         return <Form initialStudent={student} saveStudent={updateStudent} />
                     } else {
                         return (
-                        <li key={student.id}> {student.firstname} {student.lastname} 
+                        <li className="list" key={student.id}> {student.firstname} {student.lastname} 
                         <button type="button" onClick={() =>{onDelete(student)}}>X</button> 
                         <button type="button" onClick={() => {onEdit(student)}}>Edit</button></li>
                         );

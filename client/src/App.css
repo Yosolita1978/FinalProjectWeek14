@@ -37,6 +37,29 @@
   }
 }
 
-ul{
+ul {
+  line-height: 1.5em;
+  margin: 5px 10px 15px 5px;
+  padding: 0;
+}
+
+li.list{
+  margin-bottom: 5px;
+  /* color: aqua; */
   list-style: none;
+  /* position: relative; */
+  padding: 0 0 0 20px;
+}
+
+
+li.list::before {
+  content: ""; 
+  /* position: absolute;  */
+  left: 2px; 
+  top: 5px; 
+  width: 3px;
+  height: 6px;
+  border: solid #fc0217;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
