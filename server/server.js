@@ -1,11 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fetch = require('node-fetch');
 require('dotenv').config()
 const db = require('../server/db/db-connection.js'); 
 const REACT_BUILD_DIR = path.join(__dirname, '..', 'client', 'build');
 const app = express();
 app.use(express.static(REACT_BUILD_DIR));
+
 
 const PORT = process.env.PORT || 5000;
 app.use(cors());
@@ -78,6 +80,31 @@ app.put('/api/students/:studentId', cors(), async (req, res) =>{
         return res.status(400).json({e});
     }
 });
+
+
+
+// Create the post request for the City the user is searching
+let city;
+app.post("/api/search-city", (req, res) => {
+  city = req.body.city;
+  res.redirect("/api/weather");
+});
+
+// Make the GET request with the city (that it's the redirect from the user)
+
+app.get("/api/weather", cors(), async (req, res) => {
+    city = req.query.city;
+     const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.API_KEY}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      res.send(data);
+    } catch (err) {
+      console.error("Fetch error: ", err);
+    }
+  });
+  
 
 // console.log that your server is up and running
 app.listen(PORT, () => {
