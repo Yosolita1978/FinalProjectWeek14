@@ -1,4 +1,6 @@
 const express = require('express');
+// const axios = require('axios').default;
+const { auth } = require('express-openid-connect');
 const cors = require('cors');
 const path = require('path');
 const fetch = require('node-fetch');
@@ -6,16 +8,39 @@ require('dotenv').config()
 const db = require('../server/db/db-connection.js'); 
 const REACT_BUILD_DIR = path.join(__dirname, '..', 'client', 'build');
 const app = express();
-app.use(express.static(REACT_BUILD_DIR));
 
 
-const PORT = process.env.PORT || 5000;
+const config = {
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.SECRET,
+    baseURL: process.env.BASEURL,
+    clientID: process.env.CLIENTID,
+    issuerBaseURL: process.env.ISSUERBASEURL
+  };
+
+const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+app.use(auth(config));
+
 //creates an endpoint for the route /api
 app.get('/', (req, res) => {
+    console.log(req.oidc.isAuthenticated());
+    // res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
     res.sendFile(path.join(REACT_BUILD_DIR, 'index.html'));
+});
+
+app.use(express.static(REACT_BUILD_DIR));
+
+//route to check user logged
+app.get('/api/me', (req, res) => {
+    if(req.oidc.isAuthenticated()){
+        res.json(req.oidc.user);
+    } else {
+        res.status(401).json({});
+    }
 });
 
 //create the get request
@@ -81,8 +106,6 @@ app.put('/api/students/:studentId', cors(), async (req, res) =>{
     }
 });
 
-
-
 // Create the post request for the City the user is searching
 let city;
 app.post("/api/search-city", (req, res) => {
@@ -104,6 +127,20 @@ app.get("/api/weather", cors(), async (req, res) => {
       console.error("Fetch error: ", err);
     }
   });
+
+// //get request from API
+// app.get("/parks", cors(), async (req, res) => {
+ 
+//     const url = `https://developer.nps.gov/api/v1/parks?api_key=${process.env.API_KEY}`;
+//     try {
+//         const result = await axios.get(url); //axios returns promise, await is for the resolve in promise, then execute next commands
+//         console.log("parks result:", result);
+//         res.json(result.data);
+//     } catch (err) {
+//         console.error("Fetch error: ", err);
+//     }
+// })
+
   
 
 // console.log that your server is up and running
