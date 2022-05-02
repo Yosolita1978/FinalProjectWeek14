@@ -16,29 +16,6 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE IF EXISTS techtonica1;
---
--- Name: techtonica1; Type: DATABASE; Schema: -; Owner: postgres
---
-
-CREATE DATABASE techtonica1 WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'C';
-
-
-ALTER DATABASE techtonica1 OWNER TO postgres;
-
-\connect techtonica1
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -102,6 +79,7 @@ COPY public.students (id, lastname, firstname) FROM stdin;
 11	Tres	Prueba
 12	Cuatro	Prueba 
 13	Cinco	Prueba
+15	Ocho	Prueba
 \.
 
 
@@ -109,7 +87,7 @@ COPY public.students (id, lastname, firstname) FROM stdin;
 -- Name: students_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.students_id_seq', 13, true);
+SELECT pg_catalog.setval('public.students_id_seq', 15, true);
 
 
 --
